@@ -1,9 +1,9 @@
-#define R1Pin 3
-#define G1Pin 4
-#define B1Pin 5
-#define R2Pin 6
-#define G2Pin 7
-#define B2Pin 8
+#define R1Pin 4
+#define G1Pin 16
+#define B1Pin 17
+#define R2Pin 5
+#define G2Pin 18
+#define B2Pin 19
 
 const char modeSelect = 0;
 const char classic = '0';
