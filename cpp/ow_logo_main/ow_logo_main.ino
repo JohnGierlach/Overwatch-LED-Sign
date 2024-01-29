@@ -1,4 +1,7 @@
 #include <Arduino.h>
+#include "IRremote.h"
+#include "IR.h"
+
 
 #define R1Pin 4
 #define G1Pin 16
@@ -7,7 +10,9 @@
 #define G2Pin 18
 #define B2Pin 19
 
-int modeSelect = 0;
+IRrecv irrecv(RECEIVER);     // create instance of 'irrecv'
+decode_results results;      // create instance of 'decode_results'
+
 const int classic = 0;
 const int blue = 1;
 const int green = 2;
@@ -27,12 +32,29 @@ void setup() {
   pinMode(R2Pin, OUTPUT);
   pinMode(G2Pin, OUTPUT);
   pinMode(B2Pin, OUTPUT);
-
 }
 
 void loop() {
+  int tmpValue;
+  if (irrecv.decode(&results)){ // have we received an IR signal?
+
+    for (int i = 0; i < 23; i++){
+
+      if ((keyValue[i] == results.value) && (i<KEY_NUM)){
+        Serial.println(keyBuf[i]);
+        tmpValue = results.value;
+      }
+
+      else if(REPEAT==i){
+        results.value = tmpValue;
+      }
+
+    }
+    
+    irrecv.resume(); // receive the next value
+  }
   // put your main code here, to run repeatedly:
-  switch(modeSelect){
+  switch(results.value){
 
     // Classic OW Logo  
     case classic:
@@ -108,7 +130,4 @@ void getAnalogColor(int r1, int g1, int b1, int r2, int g2, int b2){
       analogWrite(G2Pin, g2);
       analogWrite(B2Pin, b2);
       delay(2000);
-
-      modeSelect++;
-
 }
