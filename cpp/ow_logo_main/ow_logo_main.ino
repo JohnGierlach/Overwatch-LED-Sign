@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #define R1Pin 4
 #define G1Pin 16
 #define B1Pin 17
@@ -5,18 +7,17 @@
 #define G2Pin 18
 #define B2Pin 19
 
-const char modeSelect = 0;
-const char classic = '0';
-const char blue = '1';
-const char green = '2';
-const char red = '3';
-const char yellow = '4';
-const char rgb = '5'; 
+int modeSelect = 0;
+const int classic = 0;
+const int blue = 1;
+const int green = 2;
+const int red = 3;
+const int yellow = 4;
+const int rgb = 5; 
 //RGB1 Pins are for the top part of Logo
 //RGB2 Pins are for the two legs of the logo
 
-// TODO : Add Bluetooth IO Pins and Setup calls
-// TODO : Add In RGB Modes for Sign
+void getAnalogColor(int r1, int g1, int b1, int r2, int g2, int b2);
 
 // Set up for IOs
 void setup() {
@@ -35,7 +36,7 @@ void loop() {
 
     // Classic OW Logo  
     case classic:
-      getAnalogColor(255, 140, 0, 
+      getAnalogColor(250, 25, 0, 
                      255, 255, 255);
     break;
 
@@ -47,20 +48,20 @@ void loop() {
     
     // Green OW Logo
     case green:
-      getAnalogColor(0, 204, 0, 
-                     0, 255, 0);
+      getAnalogColor(0, 255, 0, 
+                     50, 255, 50);
     break;
 
     // Red OW Logo
     case red:
-      getAnalogColor(204, 0, 0, 
-                     255, 0, 0);
+      getAnalogColor(255, 0, 0, 
+                     255, 10, 30);
     break;
 
     // Yellow OW Logo
     case yellow:
-      getAnalogColor(204, 204, 0, 
-                     255, 255, 0);
+      getAnalogColor(204, 80, 0, 
+                     204, 80, 30);
     break;
 
     // RGB OW Logo
@@ -71,7 +72,7 @@ void loop() {
           analogWrite(R2Pin,255-i);
           analogWrite(G1Pin, i);
           analogWrite(G2Pin, i);
-          delay(100);
+          delay(10);
         }
       for(int i=0;i<=255;i+=3)
         {
@@ -79,7 +80,7 @@ void loop() {
           analogWrite(G2Pin,255-i);
           analogWrite(B1Pin, i);
           analogWrite(B2Pin, i);
-          delay(100);
+          delay(10);
         }
       for(int i=0;i<=255;i+=3)
         {
@@ -87,12 +88,12 @@ void loop() {
           analogWrite(B2Pin,255-i);
           analogWrite(R1Pin, i);
           analogWrite(R2Pin, i);
-          delay(100);
+          delay(10);
         }
     break;
     // Classic OW Logo
     default:
-      getAnalogColor(255, 140, 0, 
+      getAnalogColor(250, 25, 0, 
                      255, 255, 255);
     break;
   }
@@ -106,4 +107,8 @@ void getAnalogColor(int r1, int g1, int b1, int r2, int g2, int b2){
       analogWrite(R2Pin, r2);
       analogWrite(G2Pin, g2);
       analogWrite(B2Pin, b2);
+      delay(2000);
+
+      modeSelect++;
+
 }
