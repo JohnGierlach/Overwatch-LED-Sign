@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include "IRremote.h"
+#include "IRremoteESP8266.h"
+#include "IRrecv.h"
 
 #define KEY_0 (0xFF6897)
 #define KEY_1 (0xFF30CF)
