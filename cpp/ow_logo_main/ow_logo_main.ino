@@ -1,6 +1,12 @@
 #include <Arduino.h>
 #include "IRremote.h"
-#include "IR.h"
+
+#define KEY_0 (0xFF6897)
+#define KEY_1 (0xFF30CF)
+#define KEY_2 (0xFF18E7)
+#define KEY_3 (0xFF7A85)
+#define KEY_4 (0xFF10EF)
+#define KEY_5 (0xFF38C7)
 
 
 #define R1Pin 4
@@ -10,15 +16,20 @@
 #define G2Pin 18
 #define B2Pin 19
 
+#define KEY_NUM 21
+#define RECEIVER 11
+
 IRrecv irrecv(RECEIVER);     // create instance of 'irrecv'
 decode_results results;      // create instance of 'decode_results'
 
-const int classic = 0;
-const int blue = 1;
-const int green = 2;
-const int red = 3;
-const int yellow = 4;
-const int rgb = 5; 
+
+// Values are the hex values of the IR reciever 
+const int classic = KEY_0;
+const int blue = KEY_1;
+const int green = KEY_2;
+const int red = KEY_3;
+const int yellow = KEY_4;
+const int rgb = KEY_5; 
 //RGB1 Pins are for the top part of Logo
 //RGB2 Pins are for the two legs of the logo
 
@@ -32,29 +43,17 @@ void setup() {
   pinMode(R2Pin, OUTPUT);
   pinMode(G2Pin, OUTPUT);
   pinMode(B2Pin, OUTPUT);
+  irrecv.enableIRIn();
 }
 
 void loop() {
   int tmpValue;
   if (irrecv.decode(&results)){ // have we received an IR signal?
-
-    for (int i = 0; i < 23; i++){
-
-      if ((keyValue[i] == results.value) && (i<KEY_NUM)){
-        Serial.println(keyBuf[i]);
-        tmpValue = results.value;
-      }
-
-      else if(REPEAT==i){
-        results.value = tmpValue;
-      }
-
-    }
-    
+    tmpValue = results.value;
     irrecv.resume(); // receive the next value
   }
   // put your main code here, to run repeatedly:
-  switch(results.value){
+  switch(tmpValue){
 
     // Classic OW Logo  
     case classic:
@@ -89,29 +88,29 @@ void loop() {
     // RGB OW Logo
     case rgb:
       for(int i=0;i<=255;i+=3)
-        {
+      {
           analogWrite(R1Pin,255-i);
           analogWrite(R2Pin,255-i);
           analogWrite(G1Pin, i);
           analogWrite(G2Pin, i);
           delay(10);
-        }
+      }
       for(int i=0;i<=255;i+=3)
-        {
+      {
           analogWrite(G1Pin,255-i);
           analogWrite(G2Pin,255-i);
           analogWrite(B1Pin, i);
           analogWrite(B2Pin, i);
           delay(10);
-        }
+      }
       for(int i=0;i<=255;i+=3)
-        {
+      {
           analogWrite(B1Pin,255-i);
           analogWrite(B2Pin,255-i);
           analogWrite(R1Pin, i);
           analogWrite(R2Pin, i);
           delay(10);
-        }
+      }
     break;
     // Classic OW Logo
     default:
