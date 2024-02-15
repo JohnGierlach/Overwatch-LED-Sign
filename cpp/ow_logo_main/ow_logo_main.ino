@@ -18,7 +18,7 @@
 #define B2Pin 19
 
 #define KEY_NUM 21
-#define RECEIVER 11
+#define RECEIVER 22
 
 IRrecv irrecv(RECEIVER);     // create instance of 'irrecv'
 decode_results results;      // create instance of 'decode_results'
